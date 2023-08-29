@@ -1,75 +1,70 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Modal } from "react-native";
 import colors from "../Colors";
 import TodoModal from "./TodoModal";
 
-export default class TodoList extends React.Component {
-  state = {
-    showListVisible: false,
+const TodoList = (props) => {
+  const [showListVisible, setShowListVisible] = useState(false);
+
+  const toggleListModal = () => {
+    setShowListVisible(!showListVisible);
   };
 
-  toggleListModal() {
-    this.setState({ showListVisible: !this.state.showListVisible });
-  }
+  const list = props.list;
 
-  render() {
-    const list = this.props.list;
+  const completedCount = list.todos.filter((todo) => todo.completed).length;
+  const remainingCount = list.todos.length - completedCount;
 
-    const completedCount = list.todos.filter((todo) => todo.completed).length;
-    const remainingCount = list.todos.length - completedCount;
-    return (
-      <View>
-        <Modal
-          animationType="slide"
-          visible={this.state.showListVisible}
-          onRequestClose={() => this.toggleListModal()}
-        >
-          <TodoModal
-            list={list}
-            closeModal={() => this.toggleListModal()}
-            updateList={this.props.updateList}
-          />
-        </Modal>
+  return (
+    <View>
+      <Modal
+        animationType="slide"
+        visible={showListVisible}
+        onRequestClose={toggleListModal}
+      >
+        <TodoModal
+          list={list}
+          closeModal={toggleListModal}
+          updateList={props.updateList}
+        />
+      </Modal>
 
-        <TouchableOpacity
+      <TouchableOpacity
+        style={{
+          ...styles.listContainer,
+          backgroundColor: list.color,
+        }}
+        onPress={toggleListModal}
+      >
+        <Text style={styles.listTitle} numberOfLines={1}>
+          {list.name}
+        </Text>
+
+        <View
           style={{
-            ...styles.listContainer,
-            backgroundColor: list.color,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-evenly",
+            alignItems: "flex-start",
+            width: "100%",
           }}
-          onPress={() => this.toggleListModal()}
         >
-          <Text style={styles.listTitle} numberOfLines={1}>
-            {list.name}
-          </Text>
-
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-evenly",
-              alignItems: "flex-start",
-              width: "100%",
-            }}
-          >
-            <View style={{ alignItems: "center", flexDirection: "row" }}>
-              <Text style={styles.count}>{remainingCount}</Text>
-              <Text style={styles.subtitle}>Remaining</Text>
-            </View>
-
-            <View style={{ alignItems: "center", flexDirection: "row" }}>
-              <Text style={{ ...styles.count, opacity: 0.5 }}>
-                {completedCount}
-              </Text>
-              <Text style={{ ...styles.subtitle, opacity: 0.5 }}>
-                Completed
-              </Text>
-            </View>
+          <View style={{ alignItems: "center", flexDirection: "row" }}>
+            <Text style={styles.count}>{remainingCount}</Text>
+            <Text style={styles.subtitle}>Remaining</Text>
           </View>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-}
+
+          <View style={{ alignItems: "center", flexDirection: "row" }}>
+            <Text style={{ ...styles.count, opacity: 0.5 }}>
+              {completedCount}
+            </Text>
+            <Text style={{ ...styles.subtitle, opacity: 0.5 }}>Completed</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   listContainer: {
@@ -100,3 +95,5 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
 });
+
+export default TodoList;
