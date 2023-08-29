@@ -14,11 +14,47 @@ import colors from "./Colors";
 import tempData from "./tempData";
 import TodoList from "./components/TodoList";
 import AddListModal from "./components/AddListModal";
+import { Amplify, API, graphqlOperation } from "aws-amplify";
+import config from "./src/aws-exports";
+import { listTodos } from "./src/graphql/queries"; // Importa la consulta generada por Amplify
+
+Amplify.configure(config);
+
 export default class App extends React.Component {
   state = {
     addTodoVisible: false,
     lists: tempData,
   };
+
+  async fetchTodos() {
+    try {
+      const response = await API.graphql(
+        graphqlOperation(
+          `query listTodos {
+            listTodos {
+              items {
+                createdAt
+                description
+                name
+                id
+                updatedAt
+              }
+            }
+          }`
+        )
+      );
+      // console.log(response.data.listTodos.items);
+      const todos = response.data.listTodos.items;
+      todos.map((todo) => {
+        console.log(todo.name);
+      });
+      // console.log("Todos:", todos);
+    } catch (error) {
+      console.error("Error fetching todos:", error);
+    }
+  }
+
+  // fetchTodos();
 
   toggleAddTodoModal() {
     this.setState({ addTodoVisible: !this.state.addTodoVisible });
@@ -49,6 +85,7 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
         <StatusBar backgroundColor="#FFF" barStyle="dark-content" />
+
         <View
           style={{
             flexDirection: "row",
@@ -64,6 +101,12 @@ export default class App extends React.Component {
           <View style={styles.divider} />
         </View>
 
+        <TouchableOpacity
+          // style={styles.floatingButton}
+          onPress={() => this.fetchTodos()}
+        >
+          <Text>CLICK</Text>
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.floatingButton}
           onPress={() => this.toggleAddTodoModal()}

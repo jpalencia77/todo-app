@@ -9,6 +9,10 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.19.3",
+    "@react-native-community/netinfo": "^9.4.1",
+    "aws-amplify": "^5.3.10",
+    "aws-amplify-react-native": "^7.0.6",
     "expo": "~49.0.8",
     "expo-status-bar": "~1.6.0",
     "firebase": "^10.3.0",
