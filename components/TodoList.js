@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Modal } from "react-native";
 import colors from "../Colors";
 import TodoModal from "./TodoModal";
+import TodosContext from "../context/todos/todosContext";
 
 const TodoList = (props) => {
+  const { getTasksByTaskListID, currentTodoList } = useContext(TodosContext);
   const [showListVisible, setShowListVisible] = useState(false);
 
   const toggleListModal = () => {
@@ -12,8 +14,12 @@ const TodoList = (props) => {
 
   const list = props.list;
 
-  const completedCount = list.todos.filter((todo) => todo.completed).length;
-  const remainingCount = list.todos.length - completedCount;
+  // todo hacer que se actualice al momento de cambiar de estado una task
+  const completedCount = list.tasks.items.filter(
+    (todo) => todo.completed
+  ).length;
+  const remainingCount = list.tasks.items.length - completedCount;
+  // todo hacer que se actualice al momento de cambiar de estado una task
 
   return (
     <View>
@@ -23,7 +29,7 @@ const TodoList = (props) => {
         onRequestClose={toggleListModal}
       >
         <TodoModal
-          list={list}
+          list={currentTodoList}
           closeModal={toggleListModal}
           updateList={props.updateList}
         />
@@ -34,10 +40,14 @@ const TodoList = (props) => {
           ...styles.listContainer,
           backgroundColor: list.color,
         }}
-        onPress={toggleListModal}
+        // onPress={toggleListModal}
+        onPress={async () => {
+          await getTasksByTaskListID(list.id);
+          toggleListModal();
+        }}
       >
         <Text style={styles.listTitle} numberOfLines={1}>
-          {list.name}
+          {list.name || list.nombre}
         </Text>
 
         <View

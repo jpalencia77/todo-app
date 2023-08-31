@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,24 +6,24 @@ import {
   View,
   KeyboardAvoidingView,
   TouchableOpacity,
-} from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
-import colors from '../Colors';
-import { API, graphqlOperation } from 'aws-amplify';
-import { createTodo } from '../src/graphql/mutations';
+} from "react-native";
+import { AntDesign } from "@expo/vector-icons";
+import colors from "../Colors";
+import { API, graphqlOperation } from "aws-amplify";
+import { createTodo } from "../src/graphql/mutations";
 
 const backgroundColors = [
-  '#5CD859',
-  '#24A6D9',
-  '#595BD9',
-  '#8022D9',
-  '#D159D8',
-  '#D85963',
-  '#D88559',
+  "#5CD859",
+  "#24A6D9",
+  "#595BD9",
+  "#8022D9",
+  "#D159D8",
+  "#D85963",
+  "#D88559",
 ];
 
 const AddListModal = (props) => {
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
   const [color, setColor] = useState(backgroundColors[0]);
 
   const createTodoItem = async () => {
@@ -40,10 +40,10 @@ const AddListModal = (props) => {
 
       console.log(response);
     } catch (error) {
-      console.error('Error creating todo:', error);
+      console.error("Error creating todo:", error);
     }
 
-    setName('');
+    setName("");
     props.closeModal();
   };
 
@@ -60,13 +60,13 @@ const AddListModal = (props) => {
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <TouchableOpacity
-        style={{ position: 'absolute', top: 64, right: 32 }}
+        style={{ position: "absolute", top: 64, right: 32 }}
         onPress={props.closeModal}
       >
         <AntDesign name="close" size={24} color={colors.black} />
       </TouchableOpacity>
 
-      <View style={{ alignSelf: 'stretch', marginHorizontal: 32 }}>
+      <View style={{ alignSelf: "stretch", marginHorizontal: 32 }}>
         <Text style={styles.title}>Create ToDo list</Text>
 
         <TextInput
@@ -78,8 +78,8 @@ const AddListModal = (props) => {
 
         <View
           style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
+            flexDirection: "row",
+            justifyContent: "space-between",
             marginTop: 12,
           }}
         >
@@ -90,9 +90,7 @@ const AddListModal = (props) => {
           style={[styles.create, { backgroundColor: color }]}
           onPress={createTodoItem}
         >
-          <Text style={{ color: colors.white, fontWeight: '600' }}>
-            Create
-          </Text>
+          <Text style={{ color: colors.white, fontWeight: "600" }}>Create</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
@@ -102,14 +100,14 @@ const AddListModal = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   title: {
     fontSize: 28,
-    fontWeight: '800',
+    fontWeight: "800",
     color: colors.black,
-    alignSelf: 'center',
+    alignSelf: "center",
     marginBottom: 16,
   },
   input: {
@@ -125,8 +123,8 @@ const styles = StyleSheet.create({
     marginTop: 24,
     height: 50,
     borderRadius: 6,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   colorSelect: {
     width: 30,
