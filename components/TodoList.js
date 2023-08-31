@@ -5,14 +5,13 @@ import TodoModal from "./TodoModal";
 import TodosContext from "../context/todos/todosContext";
 
 const TodoList = (props) => {
+  const { isRefreshing, list } = props;
   const { getTasksByTaskListID, currentTodoList } = useContext(TodosContext);
   const [showListVisible, setShowListVisible] = useState(false);
 
   const toggleListModal = () => {
     setShowListVisible(!showListVisible);
   };
-
-  const list = props.list;
 
   // todo hacer que se actualice al momento de cambiar de estado una task
   const completedCount = list.tasks.items.filter(
@@ -38,9 +37,9 @@ const TodoList = (props) => {
       <TouchableOpacity
         style={{
           ...styles.listContainer,
-          backgroundColor: list.color,
+          backgroundColor: isRefreshing ? "#dddddd" : list.color,
         }}
-        // onPress={toggleListModal}
+        disabled={isRefreshing}
         onPress={async () => {
           await getTasksByTaskListID(list.id);
           toggleListModal();

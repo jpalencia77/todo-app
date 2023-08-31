@@ -8,6 +8,8 @@ import {
   FlatList,
   Modal,
   ActivityIndicator,
+  ScrollView,
+  RefreshControl,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import colors from "../Colors";
@@ -21,18 +23,27 @@ import Colors from "../Colors";
 
 const Home = () => {
   const { lists, fetchTodos } = useContext(TodosContext);
+  const [refresh, setRefresh] = useState(false);
   const [addTodoVisible, setAddTodoVisible] = useState(false);
 
   useEffect(() => {
     fetchTodos();
   }, []);
 
+  const refreshData = async () => {
+    setRefresh(true);
+    await fetchTodos();
+    setRefresh(false);
+  };
+
   const toggleAddTodoModal = () => {
     setAddTodoVisible(!addTodoVisible);
   };
 
   const renderList = (list) => {
-    return <TodoList list={list} updateList={updateList} />;
+    return (
+      <TodoList list={list} updateList={updateList} isRefreshing={refresh} />
+    );
   };
 
   const addList = (list) => {
@@ -58,7 +69,11 @@ const Home = () => {
           >
             <Text style={styles.title}>ToDo </Text>
             <Text
-              style={{ ...styles.title, color: colors.blue, fontWeight: "300" }}
+              style={{
+                ...styles.title,
+                color: colors.blue,
+                fontWeight: "300",
+              }}
             >
               Lists
             </Text>
@@ -91,6 +106,16 @@ const Home = () => {
               renderItem={({ item }) => renderList(item)}
               keyboardShouldPersistTaps="always"
               showsVerticalScrollIndicator={false}
+              refreshControl={
+                <RefreshControl
+                  progressBackgroundColor={Colors.blue}
+                  size="default"
+                  colors={[Colors.white]}
+                  tintColor={Colors.blue}
+                  refreshing={refresh}
+                  onRefresh={() => refreshData()}
+                />
+              }
             />
           </View>
           <Modal
