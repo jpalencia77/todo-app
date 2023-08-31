@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import TodosContext from "./todosContext";
 import { API, graphqlOperation } from "aws-amplify";
-import { getTaskList, listTaskLists } from "../../src/graphql/queries";
+import { getTaskList } from "../../src/graphql/queries";
 
 const TodosState = ({ children }) => {
   const [lists, setLists] = useState([]);
@@ -66,9 +66,12 @@ const TodosState = ({ children }) => {
   const toggleTodoCompleted = async (taskId) => {
     const currentIsCompleted = currentTodoList.tasks.items.map((item) => {
       if (item.id === taskId) {
+        // console.log(item);
         return item;
       }
     });
+
+    console.log(currentIsCompleted); // todo revisar los undefined al querer hacer match con las tasks
     try {
       const response = await API.graphql(
         graphqlOperation(

@@ -8,16 +8,12 @@ import {
   FlatList,
   Modal,
   ActivityIndicator,
-  ScrollView,
   RefreshControl,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import colors from "../Colors";
-import tempData from "../tempData";
 import TodoList from "../components/TodoList";
 import AddListModal from "../components/AddListModal";
-import { API, graphqlOperation } from "aws-amplify";
-import { listTodos } from "../src/graphql/queries";
 import TodosContext from "../context/todos/todosContext";
 import Colors from "../Colors";
 
@@ -67,26 +63,19 @@ const Home = () => {
               marginLeft: 8,
             }}
           >
-            <Text style={styles.title}>ToDo </Text>
+            <Text style={styles.title}>ToDoLi </Text>
             <Text
               style={{
                 ...styles.title,
                 color: colors.blue,
                 fontWeight: "300",
+                marginLeft: -8,
               }}
             >
-              Lists
+              sts
             </Text>
             <View style={styles.divider} />
           </View>
-
-          {/* <TouchableOpacity
-        onPress={() => {
-          fetchTodos();
-        }}
-      >
-        <Text>Get Todos</Text>
-      </TouchableOpacity> */}
           <TouchableOpacity
             style={styles.floatingButton}
             onPress={toggleAddTodoModal}
